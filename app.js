@@ -13,7 +13,6 @@ module.exports = function (mainDb) {
     var bodyParser = require('body-parser');
     var consolidate = require('consolidate');
     var app = express();
-    var dbsObject = mainDb.dbsObject;
 
 
     var logWriter = require('./helpers/logWriter')();
@@ -33,10 +32,9 @@ module.exports = function (mainDb) {
     app.set('view engine', 'html');
     app.set('views', __dirname + '/views');
     app.use(logger('dev'));
-    //app.use(subDomainParser);
     app.use(bodyParser.json({strict: false, inflate: false, limit: 1024 * 1024 * 200}));
     app.use(bodyParser.urlencoded({extended: false, limit: 1024 * 1024 * 200}));
-    app.use(cookieParser("CRMkey"));
+    app.use(cookieParser("sales"));
     app.use(express.static(path.join(__dirname, 'public')));
 
     app.use(session({
