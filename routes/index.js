@@ -10,13 +10,23 @@ module.exports = function (app, mainDb) {
     var multipartMiddleware = multipart();
     var mongoose = require('mongoose');
 
+    var UserHandler = require('../handlers/users.js');
+    var usersHandler = new UserHandler(mainDb);
+
+    function auth(req, res, next){
+        if(req.session && req.session.loggedIn){
+            return res.status(200).send();
+        }
+        res.status(401).send();
+    }
+
     app.get('/', function (req, res, next) {
         res.sendfile('index.html');
     });
 
-    app.get('/login', function (req, res, next) {
-        res.render('login.html');
-    });
+    app.get('/authenticated', auth);
+
+    app.post('/login', usersHandler.auth);
 
     app.use('/events', eventsRouter);
 

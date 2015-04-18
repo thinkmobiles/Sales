@@ -6,7 +6,8 @@ module.exports = (function () {
 
     var UsersSchema = mongoose.Schema({
         pass: {type: String, default: ''},
-        user: {type: String, default: ''}
+        login: {type: String, default: ''},
+        loggedIn: {type: Date, default: Date.now}
     }, {collection: 'users'});
 
     if (!mongoose.Schemas) {

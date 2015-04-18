@@ -14,6 +14,8 @@
     "express": "4.3.0",
     "express-session": "1.10.2",
     "geoip-lite": "^1.1.6",
+    "lodash": "^3.7.0",
+    "moment": "^2.10.2",
     "mongoose": "3.8.3",
     "morgan": "1.5.1",
     "node-mailer": "~0.1.1",

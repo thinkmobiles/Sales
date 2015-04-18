@@ -13,24 +13,24 @@ var App = App ||
 require.config({
     paths: {
         jQuery: './libs/jquery-2.1.0.min.map',
-        ajaxForm: './libs/jquery.form',
-        imageCrop: './libs/jquery.Jcrop.min',
+        /*ajaxForm: './libs/jquery.form',
+        imageCrop: './libs/jquery.Jcrop.min',*/
         jqueryui: './libs/jquery-ui.min',
         Underscore: './libs/underscore-min.map.1.6.0',
         Backbone: './libs/backbone-min.map.1.1.2',
         less: './libs/less.min',
         templates: '../templates',
         text: './libs/text',
-        common: 'common',
         dateFormat: './libs/date.format',
+        moment: './libs/moment/min/moment.min',
         d3: './libs/d3.v3.min'
     },
     shim: {
         'jqueryui': ['jQuery'],
-        'ajaxForm': ['jQuery'],
-        'imageCrop': ['jQuery'],
+        /*'ajaxForm': ['jQuery'],
+        'imageCrop': ['jQuery'],*/
         'Backbone': ['Underscore', 'jQuery'],
-        'app': ['Backbone', 'less', 'jqueryui', 'ajaxForm', 'imageCrop'],
+        'app': ['Backbone', 'less', 'jqueryui'],
         'd3': {
             exports: 'd3'
         },
@@ -149,7 +149,7 @@ require(['app'], function (app) {
 
     Backbone.View.prototype.changeLocationHash = function (page, count, filter) {
         var location = window.location.hash;
-        var mainLocation = '#easyErp/' + this.contentType + '/' + this.viewType;
+        var mainLocation = this.contentType + '/' + this.viewType;
         var pId = (location.split('/pId=')[1]) ? location.split('/pId=')[1].split('/')[0] : '';
         if (!page && this.viewType == 'list') {
             page = (location.split('/p=')[1]) ? location.split('/p=')[1].split('/')[0] : 1;

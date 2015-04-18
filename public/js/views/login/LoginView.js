@@ -28,7 +28,6 @@ define([
                 this.$el.html(_.template(LoginTemplate, {options: options.dbs}));
             } else {
                 this.$el.html(LoginTemplate);
-                $("#loginForm").addClass("notRegister");
             }
             return this;
         },
@@ -59,7 +58,7 @@ define([
             $("#loginForm").removeClass("notRegister");
             data = {
                 //login: this.$("#ulogin").val(),
-                email: this.$("#ulogin").val(),
+                login: this.$("#ulogin").val(),
                 pass: this.$("#upass").val()
             };
 

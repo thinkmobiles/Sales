@@ -1,9 +1,8 @@
 define([
-    'text!templates/myProfile/TopBarTemplate.html',
-    'custom',
-    "common"
+    'text!templates/Clients/TopBarTemplate.html',
+    'custom'
 ],
-    function (TopBarTemplate, Custom, Common) {
+    function (TopBarTemplate, Custom) {
         var TopBarView = Backbone.View.extend({
             el:'#top-bar',
             contentType: "My Clients",
@@ -22,7 +21,6 @@ define([
             render: function(){
                 $('title').text(this.contentType);
                 this.$el.html(this.template({contentType: this.contentType}));
-                Common.displayControlBtnsByActionType(this.actionType);
 
                 return this;
             }

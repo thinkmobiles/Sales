@@ -21,6 +21,7 @@ module.exports = function (db) {
     var eventsHandler = new Events(db);
 
     router.get('/', eventsHandler.getStats);
+    router.get('/count', eventsHandler.getCount);
     router.post('/', eventsHandler.track);
 
     return router;

@@ -1,7 +1,7 @@
 define([
-    'text!templates/myClients/ListHeader.html',
-    'views/myClients/ListItemView',
-    'collections/Clients/clients',
+    'text!templates/Clients/ListHeader.html',
+    'views/Clients/ListItemView',
+    'collections/clients',
     'dataService'
 ],
 
@@ -12,7 +12,7 @@ define([
             listLength: null,
             sort: null,
             page: null, //if reload page, and in url is valid page
-            contentType: 'Clients',//needs in view.prototype.changeLocationHash
+            contentType: 'clients',//needs in view.prototype.changeLocationHash
             viewType: 'list',//needs in view.prototype.changeLocationHash
 
             initialize: function (options) {
@@ -24,6 +24,7 @@ define([
                 this.deleteCounter = 0;
                 this.page = options.collection.page;
                 this.sort = options.sort;
+                this.filter = options.filter;
                 this.render();
                 this.getTotalLength(null, this.defaultItemsNumber);
                 this.contentCollection = contentCollection;
@@ -112,7 +113,7 @@ define([
             },
 
             getTotalLength: function (currentNumber, itemsNumber) {
-                dataService.getData('/saas/clientList/count', { currentNumber: currentNumber, newCollection: this.newCollection },
+                dataService.getData('/events/count', { currentNumber: currentNumber, newCollection: this.newCollection, filter: this.filter },
                  function (response, context) {
                     var page = context.page || 1;
                     var length = context.listLength = response.count || 0;

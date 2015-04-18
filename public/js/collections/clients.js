@@ -2,16 +2,16 @@
  * Created by Roman on 14.04.2015.
  */
 define([
-        'common'
+        'moment'
     ],
-    function (common) {
+    function (moment) {
         var ClientModel = Backbone.Model.extend({
             idAttribute: "_id"
         });
 
         var UsersCollection = Backbone.Collection.extend({
             model: ClientModel,
-            url: "/saas/clientList",
+            url: "/events",
             page:null,
             namberToShow: null,
             viewType: null,
@@ -57,8 +57,8 @@ define([
             parse: function (response) {
                 if (response) {
                     _.map(response, function (company) {
-                        if (company.registrationDate)
-                            company.registrationDate = common.utcDateToLocaleDateTime(company.registrationDate);
+                        if (company.date)
+                            company.date = moment(company.date).format("D/M/YYYY HH:mm");
                         return company;
                     });
                 }

@@ -1,7 +1,7 @@
 // Filename: communication.js
 define(function () {
     var checkLogin = function (callback) {
-        var url = "/account/authenticated";
+        var url = "/authenticated";
         $.ajax({
             url: url,
             type: "GET",
@@ -12,7 +12,7 @@ define(function () {
                 return callback(false);
             }
         });
-    }
+    };
 
     return {
         checkLogin: checkLogin
