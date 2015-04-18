@@ -3,7 +3,7 @@
  */
 
 module.exports = function (app, mainDb) {
-   /* var saasRouter = require('./events')(mainDb);*/
+    var eventsRouter = require('./events')(mainDb);
     var logWriter = require('../helpers/logWriter')();
     var RESPONSES = require('../constants/responses');
     var multipart = require('connect-multiparty');
@@ -18,7 +18,7 @@ module.exports = function (app, mainDb) {
         res.render('login.html');
     });
 
-    //app.use('/saas', saasRouter);
+    app.use('/events', eventsRouter);
 
     function notFound (req, res, next) {
         res.status(404);

@@ -3,7 +3,7 @@
  */
 var express = require('express');
 var router = express.Router();
-var Saas = require('../handlers/events');
+var Events = require('../handlers/events');
 
 function isMasterLoggedIn(req, res, next){
     var err;
@@ -17,13 +17,10 @@ function isMasterLoggedIn(req, res, next){
     next(err);
 }
 
-module.exports = function (mainDb) {
+module.exports = function (db) {
+    var eventsHandler = new Events(db);
 
-    /*router.get('/', function(req, res, next){
-        res.render('saas.html');
-    });*/
-    router.get('/stats', isMasterLoggedIn, eventsHandler.stats);
-    //router.get('/clientList/count', isMasterLoggedIn, subDomainHandler.count);
+    router.get('/', eventsHandler.getStats);
     router.post('/', eventsHandler.track);
 
     return router;
