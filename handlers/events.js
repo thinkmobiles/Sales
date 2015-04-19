@@ -31,7 +31,7 @@ var Events = function (db) {
             return clientList(data, res, next);
         }
 
-        groupedList(data, res, next);
+        filteredList(data, res, next);
 
         function clientList (data, res, next) {
             var filter = {
@@ -63,7 +63,11 @@ var Events = function (db) {
             var endDate = data.end;
             var zoom = data.z;
             var groupBy = data.g;
-
+            var filterBy = data.f;
+            var filteredResult = {
+                saasTrial: [],
+                demo: []
+            };
             var filter = {
                 $match: {
                     'country': {
@@ -96,10 +100,69 @@ var Events = function (db) {
                 if (err) {
                     return next(err);
                 }
+                filteredResult.saasTrial = _.filter(events, {registrType: 'saasTrial'});
+                filteredResult.demo = _.filter(events, {registrType: 'demo'});
 
-                events = _.groupBy(events, 'country');
+                res.status(200).send(filteredResult)
+            });
+        }
 
-                res.status(200).send(events)
+        function filteredList (data, res, next) {
+            var registerType = data.registerType;
+            var filterBy = data.f || 'register';
+            var now = new Date();
+            var month = now.getMonth() + 1;
+            var filter = {
+                $match: {
+                    country: {
+                        $nin: ['UA']
+                    },
+                    name: filterBy,
+                    registrType: registerType
+                }
+            };
+            var project = {
+                $project: {
+                    month: {$month: "$date"}
+                }
+            };
+            var query = Events.aggregate([filter, project, {
+                $match: {
+                    month: month
+                }
+            }, {
+                $project: {
+                    _id: 1
+                }
+            }]);
+
+            query.exec(function (err, events) {
+                if (err) {
+                    return next(err);
+                }
+
+                events = _.map(events, '_id');
+
+                Events.aggregate([
+                    {
+                        $match: {
+                            _id: {$in: events}
+                        }
+                    }, {
+                        $project: {
+                            day: {$dayOfMonth: '$date'}
+                        }
+                    }, {
+                        $group: {
+                            _id: '$day',
+                            count: {$sum: 1}
+                        }
+                    }]).exec(function (err, events) {
+                    if (err) {
+                        return next(err);
+                    }
+                    res.status(200).send(events)
+                });
             });
         }
     };

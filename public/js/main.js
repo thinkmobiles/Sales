@@ -30,7 +30,7 @@ require.config({
         /*'ajaxForm': ['jQuery'],
         'imageCrop': ['jQuery'],*/
         'Backbone': ['Underscore', 'jQuery'],
-        'app': ['Backbone', 'less', 'jqueryui'],
+        'app': ['Backbone', 'less', 'jqueryui', 'd3'],
         'd3': {
             exports: 'd3'
         },

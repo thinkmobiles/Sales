@@ -2,8 +2,9 @@
 define([
   'views/main/MainView',
   'views/login/LoginView',
+  'views/menu/TopMenuView',
   'custom'
-], function (mainView, loginView, custom) {
+], function (mainView, loginView, topMenuView, custom) {
 
     var appRouter = Backbone.Router.extend({
 
@@ -51,9 +52,7 @@ define([
                 var newCollection = true;
 
                 if (context.mainView === null) {
-                    context.main("Persons");
-                } else {
-                    context.mainView.updateMenu("Persons");
+                    context.main();
                 }
 
 
@@ -79,14 +78,8 @@ define([
                     function createViews() {
                         collection.unbind('reset');
                         var topbarView = new topBarView({ actionType: "Content", collection: collection });
-                        var contentview = new contentView({ collection: collection, startTime: startTime, filter: filter, newCollection: newCollection });
 
-                        topbarView.bind('createEvent', contentview.createItem, contentview);
-                        topbarView.bind('editEvent', contentview.editItem, contentview);
-                        topbarView.bind('deleteEvent', contentview.deleteItems, contentview);
-
-                        collection.bind('showmore', contentview.showMoreContent, contentview);
-                        context.changeView(contentview);
+                        context.changeView(contentView, { collection: collection, startTime: startTime, filter: filter, newCollection: newCollection });
                         context.changeTopBarView(topbarView);
                     }
                 });
@@ -300,16 +293,17 @@ define([
             this.topBarView = topBarView;
         },
 
-        changeView: function (view) {
+        changeView: function (view, options) {
             if (this.view) {
                 this.view.undelegateEvents();
+                $(".ui-dialog").remove();
             }
-            $(document).trigger("resize");
-            this.view = view;
+            this.view = new view(options);
         },
 
         main: function (contentType) {
             this.mainView = new mainView({ contentType: contentType });
+            this.topBarView = new topMenuView();
             this.changeWrapperView(this.mainView);
         },
 

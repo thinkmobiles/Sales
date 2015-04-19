@@ -1,11 +1,12 @@
 define([
-    'text!templates/Clients/ListHeader.html',
-    'views/Clients/ListItemView',
-    'collections/clients',
-    'dataService'
-],
+        'text!templates/Clients/ListHeader.html',
+        'views/Clients/ListItemView',
+        'views/Charts/TopChart',
+        'collections/clients',
+        'dataService'
+    ],
 
-    function (listTemplate, listItemView, contentCollection, dataService) {
+    function (listTemplate, listItemView, TopChart, contentCollection, dataService) {
         var ClientsView = Backbone.View.extend({
             el: '#content-holder',
             defaultItemsNumber: null,
@@ -16,6 +17,8 @@ define([
             viewType: 'list',//needs in view.prototype.changeLocationHash
 
             initialize: function (options) {
+                new TopChart();
+
                 this.startTime = options.startTime;
                 this.collection = options.collection;
                 _.bind(this.collection.showMore, this.collection);
@@ -45,7 +48,6 @@ define([
                 "click #lastShowPage": "lastPage",
                 "click .oe_sortable": "goSort"
             },
-
 
 
             fetchSortCollection: function (sortObject) {
@@ -84,18 +86,18 @@ define([
                 }
                 switch (sortClass) {
                     case "sortDn":
-                        {
-                            target$.parent().find("th").removeClass('sortDn').removeClass('sortUp');
-                            target$.removeClass('sortDn').addClass('sortUp');
-                            sortConst = 1;
-                        }
+                    {
+                        target$.parent().find("th").removeClass('sortDn').removeClass('sortUp');
+                        target$.removeClass('sortDn').addClass('sortUp');
+                        sortConst = 1;
+                    }
                         break;
                     case "sortUp":
-                        {
-                            target$.parent().find("th").removeClass('sortDn').removeClass('sortUp');
-                            target$.removeClass('sortUp').addClass('sortDn');
-                            sortConst = -1;
-                        }
+                    {
+                        target$.parent().find("th").removeClass('sortDn').removeClass('sortUp');
+                        target$.removeClass('sortUp').addClass('sortDn');
+                        sortConst = -1;
+                    }
                         break;
                 }
                 sortObject[sortBy] = sortConst;
@@ -113,17 +115,21 @@ define([
             },
 
             getTotalLength: function (currentNumber, itemsNumber) {
-                dataService.getData('/events/count', { currentNumber: currentNumber, newCollection: this.newCollection, filter: this.filter },
-                 function (response, context) {
-                    var page = context.page || 1;
-                    var length = context.listLength = response.count || 0;
-                    if (itemsNumber * (page - 1) > length) {
-                        context.page = page = Math.ceil(length / itemsNumber);
-                        context.fetchSortCollection(context.sort);
-                        context.changeLocationHash(page, context.defaultItemsNumber);
-                    }
-                    context.pageElementRender(response.count, itemsNumber, page);//prototype in main.js
-                }, this);
+                dataService.getData('/events/count', {
+                        currentNumber: currentNumber,
+                        newCollection: this.newCollection,
+                        filter: this.filter
+                    },
+                    function (response, context) {
+                        var page = context.page || 1;
+                        var length = context.listLength = response.count || 0;
+                        if (itemsNumber * (page - 1) > length) {
+                            context.page = page = Math.ceil(length / itemsNumber);
+                            context.fetchSortCollection(context.sort);
+                            context.changeLocationHash(page, context.defaultItemsNumber);
+                        }
+                        context.pageElementRender(response.count, itemsNumber, page);//prototype in main.js
+                    }, this);
             },
             renderContent: function () {
                 var currentEl = this.$el;
@@ -131,7 +137,11 @@ define([
                 $("#top-bar-deleteBtn").hide();
                 $('#check_all').prop('checked', false);
                 tBody.empty();
-                var itemView = new listItemView({ collection: this.collection, page: currentEl.find("#currentShowPage").val(), itemsNumber: currentEl.find("span#itemsNumber").text() });
+                var itemView = new listItemView({
+                    collection: this.collection,
+                    page: currentEl.find("#currentShowPage").val(),
+                    itemsNumber: currentEl.find("span#itemsNumber").text()
+                });
                 tBody.append(itemView.render());
                 var pagenation = this.$el.find('.pagination');
                 if (this.collection.length === 0) {
@@ -147,7 +157,11 @@ define([
 
                 currentEl.html('');
                 currentEl.append(_.template(listTemplate));
-                currentEl.append(new listItemView({ collection: this.collection, page: this.page, itemsNumber: this.collection.namberToShow }).render());
+                currentEl.append(new listItemView({
+                    collection: this.collection,
+                    page: this.page,
+                    itemsNumber: this.collection.namberToShow
+                }).render());
 
                 $('#check_all').click(function () {
                     $(':checkbox').prop('checked', this.checked);
@@ -252,13 +266,17 @@ define([
 
             showPage: function (event) {
                 event.preventDefault();
-                this.showP(event, { sort: this.sort });
+                this.showP(event, {sort: this.sort});
             },
 
             showMoreContent: function (newModels) {
                 var holder = this.$el;
                 holder.find("#listTable").empty();
-                holder.append(new listItemView({ collection: newModels, page: holder.find("#currentShowPage").val(), itemsNumber: holder.find("span#itemsNumber").text() }).render());
+                holder.append(new listItemView({
+                    collection: newModels,
+                    page: holder.find("#currentShowPage").val(),
+                    itemsNumber: holder.find("span#itemsNumber").text()
+                }).render());
                 var pagenation = holder.find('.pagination');
                 if (newModels.length !== 0) {
                     pagenation.show();
@@ -298,13 +316,13 @@ define([
                 }, function (response, context) {
                     context.listLength = response.count || 0;
                 }, this);
-                
+
                 this.deleteRender(deleteCounter, deletePage, {
                     newCollection: this.newCollection
                 });
-                
+
                 var pagenation = this.$el.find('.pagination');
-                
+
                 if (this.collection.length === 0) {
                     pagenation.hide();
                 } else {
