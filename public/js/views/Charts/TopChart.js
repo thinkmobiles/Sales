@@ -11,6 +11,8 @@ define([
         className: 'topChartEl',
         template: _.template(topChart),
         initialize: function (options) {
+            this.countryRegExp = /country/;
+
             var self = this;
             this.collection = new topChartCollection({
                 registerType: 'saasTrial'
@@ -24,24 +26,19 @@ define([
             });
         },
         events: {
-            "click .chartButtons span a": "fetchNew"
+            "click .chartButtons li a": "fetchNew"
         },
 
         fetchNew: function (e) {
             var self = this;
-            var id = $(e.target).closest('span').attr('id');
-            var isCountry = /country/.test(id);
+            var id = $(e.target).closest('li').attr('id');
+            var isCountry = this.countryRegExp.test(id);
             var collection = new topChartCollection({
                 g: isCountry ? 'country': null,
                 registerType: id
             });
 
-            if(isCountry) {
-                this.gropFilter = id;
-                this.renderType = 'byCountry';
-            } else {
-                this.renderType = id;
-            }
+            this.renderType = id;
 
             collection.bind('reset', function () {
                 self.collection.reset(collection.toJSON());
@@ -51,11 +48,11 @@ define([
 
         renderByCountry: function () {
             $('#topChart').empty();
-
+            var filterType = this.renderType.replace('country','');
             var WIDTH = this.$el.width();
             var HEIGH = this.$el.height();
-            var saasData = this.collection.toJSON()[0].saasTrial;
-            var margin = {top: 20, right: 40, bottom: 50, left: 60};
+            var saasData = this.collection.toJSON()[0][filterType];
+            var margin = {top: 20, right: 70, bottom: 30, left: 60};
             var width = WIDTH - margin.left - margin.right - 15;
             var height = HEIGH - margin.top - margin.bottom;
             var now = new Date();
@@ -129,7 +126,7 @@ define([
                 })
                 .attr("fill", "white");
 
-            topChart.selectAll(".xAxesName")
+            topChart.selectAll(".axesName")
                 .data(saasData)
                 .enter()
                 .append("text")
@@ -141,7 +138,7 @@ define([
                     return x(d.country) + x.rangeBand()/2;
                 })
                 .attr("y", HEIGH - 25)
-                .attr('class', 'xAxesName')
+                .attr('class', 'axesName')
                 .text(function (d, index) {
                     if(!d.country){
                         d.country = 'other';
@@ -162,7 +159,7 @@ define([
             var WIDTH = this.$el.width();
             var HEIGH = this.$el.height();
             var saasData = this.collection.toJSON();
-            var margin = {top: 20, right: 40, bottom: 30, left: 60};
+            var margin = {top: 20, right: 70, bottom: 30, left: 60};
             var width = WIDTH - margin.left - margin.right - 15;
             var height = HEIGH - margin.top - margin.bottom;
             var now = new Date();
@@ -190,7 +187,7 @@ define([
                 .attr("width", width)
                 .attr("height", height);
 
-            x.domain([1, maxDays]);
+            x.domain([0, maxDays]);
 
             y.domain([0, d3.max(saasData.map(function (d) {
                 return d.count;
@@ -202,7 +199,7 @@ define([
                 .enter()
                 .append("svg:rect")
                 .attr("x", function (datum, index) {
-                    return x(datum._id);
+                    return (x(datum._id) - barWidth / 2);
                 })
                 .attr("y", function (datum) {
                     return y(datum.count);
@@ -219,7 +216,7 @@ define([
                 .append("svg:text")
                 .attr('class', 'inBarText')
                 .attr("x", function (datum, index) {
-                    return x(datum._id);
+                    return (x(datum._id) - barWidth / 2);
                 })
                 .attr("y", function (datum) {
                     return y(datum.count);
@@ -246,7 +243,7 @@ define([
 
             topChart.append('svg:g')
                 .attr('class', 'x axis')
-                .attr('transform', 'translate(' + (margin.left/* - margin.right*/) + ',' + (height + 5) + ')')
+                .attr('transform', 'translate(0,' + (height + 5) + ')')
                 .call(xAxis);
 
             topChart.append('svg:g')
@@ -257,15 +254,15 @@ define([
             topChart.append('svg:text')
                 .attr("x", x(maxDays / 2))
                 .attr("y", HEIGH - 5)
-                .attr('class', 'xAxesName')
+                .attr('class', 'axesName')
                 .text('Date');
 
             topChart.append('svg:text')
-                .attr("x", 20)
-                .attr("y", HEIGH - 5)
-                .attr('class', 'xAxesName')
+                .attr("x", - (HEIGH / 2 + margin.bottom))
+                .attr("y", margin.left - 10)
+                .attr('class', 'axesName')
                 .text('Number')
-                .attr("transform", 'translate(-' + (margin.left + margin.right + 30) + ',' + (HEIGH / 2 + 30) + ') rotate(-90)');
+                .attr("transform", 'translate(0, 0) rotate(-90)');
 
             this.$el.find('.chartButtons').remove();
             this.$el.append(this.template);
@@ -276,7 +273,7 @@ define([
         render: function () {
             var renderType = this.renderType;
 
-            if (renderType && renderType === 'byCountry') {
+            if (renderType && this.countryRegExp.test(renderType)) {
                 return this.renderByCountry();
             }
 
