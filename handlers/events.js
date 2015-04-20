@@ -27,8 +27,12 @@ var Events = function (db) {
         var data = req.query;
 
 
-        if (!data.g) {
+        if (!data.registerType && !data.g) {
             return clientList(data, res, next);
+        }
+
+        if (data.g) {
+            return groupedList(data, res, next);
         }
 
         filteredList(data, res, next);
