@@ -66,33 +66,29 @@ var Events = function (db) {
             var startDate = data.start;
             var endDate = data.end;
             var zoom = data.z;
+            var registerType = data.registerType ? data.registerType.replace('country', '') :  'saasTrial';
             var groupBy = data.g;
             var filterBy = data.f;
-            var filteredResult = {
-                saasTrial: [],
-                demo: []
-            };
+
             var filter = {
                 $match: {
                     'country': {
                         $nin: ['UA']
-                    }
+                    },
+                    name: filterBy,
+                    registrType: registerType
                 }
             };
             var group = {
                 $group: {
-                    _id: {
-                        country: '$' + groupBy,
-                        registrType: '$registrType'
-                    },
+                    _id: '$' + groupBy,
                     count: {$sum: 1}
                 }
             };
 
             var project = {
                 $project: {
-                    country: '$_id.country',
-                    registrType: '$_id.registrType',
+                    country: '$_id',
                     count: 1,
                     _id: 0
                 }
@@ -104,10 +100,8 @@ var Events = function (db) {
                 if (err) {
                     return next(err);
                 }
-                filteredResult.saasTrial = _.filter(events, {registrType: 'saasTrial'});
-                filteredResult.demo = _.filter(events, {registrType: 'demo'});
 
-                res.status(200).send(filteredResult)
+                res.status(200).send(events)
             });
         }
 
