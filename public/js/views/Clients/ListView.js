@@ -22,6 +22,7 @@ define([
                 this.startTime = options.startTime;
                 this.collection = options.collection;
                 _.bind(this.collection.showMore, this.collection);
+                this.collection.bind('showmore', this.showMoreContent, this);
                 this.defaultItemsNumber = this.collection.namberToShow || 50;
                 this.newCollection = options.newCollection;
                 this.deleteCounter = 0;
@@ -31,6 +32,9 @@ define([
                 this.render();
                 this.getTotalLength(null, this.defaultItemsNumber);
                 this.contentCollection = contentCollection;
+
+                this.contentCollection.bind('reset', this.renderContent, this);
+                this.contentCollection.bind('showmore', this.showMoreContent, this);
             },
 
             events: {
@@ -256,7 +260,7 @@ define([
                 this.collection.showMore({
                     count: itemsNumber,
                     page: 1,
-                    newCollection: this.newCollection,
+                    newCollection: this.newCollection
                 });
                 this.page = 1;
                 $("#top-bar-deleteBtn").hide();

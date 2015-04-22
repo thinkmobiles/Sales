@@ -77,6 +77,7 @@ define([
 
                     function createViews() {
                         collection.unbind('reset');
+
                         var topbarView = new topBarView({ actionType: "Content", collection: collection });
 
                         context.changeView(contentView, { collection: collection, startTime: startTime, filter: filter, newCollection: newCollection });
