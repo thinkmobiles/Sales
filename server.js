@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var mainAppConfig = require('./config/main').mainApp;
-var mainDb = mongoose.createConnection('localhost', 'salesDb');
+var mainDb = mongoose.createConnection('192.168.88.250', 'salesDb');
 //var sessionParser = require('./helpers/sessionParser');
 
 require('./config/' + mainAppConfig.NODE_ENV);

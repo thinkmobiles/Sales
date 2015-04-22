@@ -49,6 +49,7 @@ define([
             });
 
             this.renderType = id;
+            this.registerType = id;
 
             collection.bind('reset', function () {
                 self.collection.reset(collection.toJSON());
@@ -64,6 +65,8 @@ define([
                 registerType: this.registerType,
                 f: id
             });
+
+            this.filterType = id;
 
             collection.bind('reset', function () {
                 self.collection.reset(collection.toJSON());
@@ -173,6 +176,7 @@ define([
                 });
 
             this.$el.find('.chartButtons').remove();
+            this.$el.find('.filterTypeButtons').remove();
             this.$el.append(this.template);
 
             return this;

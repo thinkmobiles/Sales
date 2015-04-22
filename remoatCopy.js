@@ -5,7 +5,7 @@ var remoat = mongoose.createConnection('5.189.142.175', 'mainDB');
 remoat.once('connected', function () {
     console.log('connected to mainDB on 5.189.142.175');
 
-    var local = mongoose.createConnection('localhost', 'salesDb');
+    var local = mongoose.createConnection('192.168.88.250', 'salesDb');
     local.once('connected', function () {
         var SaasSchema = mongoose.Schema({
             _id: String,
