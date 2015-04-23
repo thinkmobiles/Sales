@@ -1,9 +1,25 @@
-<ul class="chartButtons">
-    <li id="saasTrial"><a class="active" href="javascript:;">Saas</a></li>
-    <li id="demo"><a href="javascript:;">Demo</a></li>
-    <li id="countrysaasTrial"><a href="javascript:;">ByCountry / Saas</a></li>
-    <li id="countrydemo"><a href="javascript:;">ByCountry / Demo</a></li>
+<ul id="chartMenu">
+<li><a id="main_btn">Chart</a>
+<ul id="mainMenu" class="chartButtons" role="menu" aria-labelledby="dropdownMenu">
+    <li id="saasLi"><a>Saas</a>
+        <ul id="saasMenu" class="chartButtons">
+            <li id="saasTrial"><a class="active" href="javascript:;">Login by Date</a></li>
+            <li id="countrysaasTrial"><a href="javascript:;">Login by Country</a></li>
+
+            <li id="saasTrial"><a class="active" href="javascript:;">Register by Date</a></li>
+            <li id="countrysaasTrial"><a href="javascript:;">Register by Country</a></li>
+        </ul>
+    </li>
+    <li id="demoLi"><a>Demo</a>
+        <ul id="demoMenu" class="chartButtons">
+            <li id="demo"><a href="javascript:;">Demo</a></li>
+            <li id="countrydemo"><a href="javascript:;">ByCountry / Demo</a></li>
+        </ul>
+    </li>
 </ul>
+</li>
+</ul>
+
 <ul class="filterTypeButtons">
     <li id="login"><a href="javascript:;">Login</a></li>
     <!--<li id="session"><a href="javascript:;">Session</a></li>-->
