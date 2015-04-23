@@ -294,6 +294,7 @@ define([
                 .attr("transform", 'translate(0, 0) rotate(-90)');
 
             this.$el.find('.chartButtons').remove();
+            this.$el.find('.filterTypeButtons').remove();
             this.$el.append(this.template);
 
             return this;

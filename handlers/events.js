@@ -41,7 +41,8 @@ var Events = function (db) {
             var filter = {
                 'country': {
                     $nin: ['UA']
-                }
+                },
+                ip: {$nin: [/192.168/, /::/]}
             };
             var query = Events.find(filter, {pass: 0, __v: 0});
 
@@ -58,7 +59,7 @@ var Events = function (db) {
                     return next(err);
                 }
 
-                res.status(200).send(events)
+                res.status(200).send(events);
             });
         };
 
@@ -66,7 +67,7 @@ var Events = function (db) {
             var startDate = data.start;
             var endDate = data.end;
             var zoom = data.z;
-            var registerType = data.registerType ? data.registerType.replace('country', '') :  'saasTrial';
+            var registerType = data.registerType ? data.registerType.replace('country', '') : 'saasTrial';
             var groupBy = data.g;
             var filterBy = data.f;
 
@@ -75,6 +76,7 @@ var Events = function (db) {
                     'country': {
                         $nin: ['UA']
                     },
+                    ip: {$nin: [/192.168/, /::/]},
                     name: filterBy,
                     registrType: registerType
                 }
@@ -116,6 +118,7 @@ var Events = function (db) {
                         $nin: ['UA']
                     },
                     name: filterBy,
+                    ip: {$nin: [/192.168/, /::/]},
                     registrType: registerType
                 }
             };
@@ -173,7 +176,7 @@ var Events = function (db) {
         var groupBy = query.g;
         var filter = query.filter;
 
-        Events.find({name: 'register', country: {$nin: ['UA']}}).count(function (err, events) {
+        Events.find({name: 'register', country: {$nin: ['UA']}, ip: {$nin: [/192.168/, /::/]}}).count(function (err, events) {
             if (err) {
                 return next(err);
             }
