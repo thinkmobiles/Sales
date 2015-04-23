@@ -27,46 +27,22 @@ define([
             });
         },
         events: {
-            "click .chartButtons li a": "fetchNew",
-            "click .filterTypeButtons li a": "selectFilterType"
+            "click .chartButtons li a": "fetchNew"
         },
 
         fetchNew: function (e) {
             var self = this;
-            var id = $(e.target).closest('li').attr('id');
-            var isCountry = this.countryRegExp.test(id);
+            var el = $(e.target).closest('li');
+            var registerType = el.data('type');
+            var filter = el.data('filter');
+            var groupBy = el.data('group');
 
-            if (isCountry) {
-                this.g = 'country';
-            } else {
-                this.g = null;
-            }
 
             var collection = new topChartCollection({
-                g: this.g,
-                registerType: id,
-                f: this.filterType
+                g: groupBy,
+                registerType: registerType,
+                f: filter
             });
-
-            this.renderType = id;
-            this.registerType = id;
-
-            collection.bind('reset', function () {
-                self.collection.reset(collection.toJSON());
-            });
-
-        },
-
-        selectFilterType: function (e) {
-            var self = this;
-            var id = $(e.target).closest('li').attr('id');
-            var collection = new topChartCollection({
-                g: this.g,
-                registerType: this.registerType,
-                f: id
-            });
-
-            this.filterType = id;
 
             collection.bind('reset', function () {
                 self.collection.reset(collection.toJSON());

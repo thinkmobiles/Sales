@@ -1,27 +1,21 @@
 <ul id="chartMenu">
-<li><a id="main_btn">Chart</a>
-<ul id="mainMenu" class="chartButtons" role="menu" aria-labelledby="dropdownMenu">
-    <li id="saasLi"><a>Saas</a>
-        <ul id="saasMenu" class="chartButtons">
-            <li id="saasTrial"><a class="active" href="javascript:;">Login by Date</a></li>
-            <li id="countrysaasTrial"><a href="javascript:;">Login by Country</a></li>
+    <li><a id="main_btn">Chart</a>
+        <ul id="mainMenu" class="chartButtons" role="menu" aria-labelledby="dropdownMenu">
+            <li id="saasLi"><a>Saas</a>
+                <ul id="saasMenu" class="chartButtons">
+                    <li data-filter="login" data-type="saasTrial"><a class="active" href="javascript:;">Login by Date</a></li>
+                    <li data-filter="login" data-type="saasTrial" data-group="country"><a href="javascript:;">Login by Country</a></li>
 
-            <li id="saasTrial"><a class="active" href="javascript:;">Register by Date</a></li>
-            <li id="countrysaasTrial"><a href="javascript:;">Register by Country</a></li>
+                    <li data-filter="register" data-type="saasTrial"><a class="active" href="javascript:;">Register by Date</a></li>
+                    <li data-filter="register" data-type="saasTrial" data-group="country"><a href="javascript:;">Register by Country</a></li>
+                </ul>
+            </li>
+            <li id="demoLi"><a>Demo</a>
+                <ul id="demoMenu" class="chartButtons">
+                    <li data-filter="register" data-type="demo"><a href="javascript:;">Demo</a></li>
+                    <li data-filter="register" data-type="demo" data-group="country"><a href="javascript:;">ByCountry / Demo</a></li>
+                </ul>
+            </li>
         </ul>
     </li>
-    <li id="demoLi"><a>Demo</a>
-        <ul id="demoMenu" class="chartButtons">
-            <li id="demo"><a href="javascript:;">Demo</a></li>
-            <li id="countrydemo"><a href="javascript:;">ByCountry / Demo</a></li>
-        </ul>
-    </li>
-</ul>
-</li>
-</ul>
-
-<ul class="filterTypeButtons">
-    <li id="login"><a href="javascript:;">Login</a></li>
-    <!--<li id="session"><a href="javascript:;">Session</a></li>-->
-    <li id="register"><a class="active" href="javascript:;">By registration</a></li>
 </ul>
