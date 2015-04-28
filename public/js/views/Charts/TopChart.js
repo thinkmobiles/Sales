@@ -13,8 +13,6 @@ define([
         initialize: function (options) {
             var self = this;
 
-            this.countryRegExp = /country/;
-            this.filterType = 'register';
             this.registerType = options ? options.registerType : 'saasTrial';
             this.collection = new topChartCollection({
                 registerType: 'saasTrial'
@@ -37,6 +35,7 @@ define([
             var filter = el.data('filter');
             var groupBy = el.data('group');
 
+            this.groupBy = groupBy;
 
             var collection = new topChartCollection({
                 g: groupBy,
@@ -279,7 +278,7 @@ define([
         render: function () {
             var renderType = this.renderType;
 
-            if (renderType && this.countryRegExp.test(renderType)) {
+            if (this.groupBy && this.groupBy === 'country') {
                 return this.renderByCountry();
             }
 
