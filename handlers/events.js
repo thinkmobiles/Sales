@@ -42,7 +42,8 @@ var Events = function (db) {
                 'country': {
                     $nin: ['UA']
                 },
-                ip: {$nin: [/192.168/, /::/]}
+                ip: {$nin: [/192.168/, /::/]},
+                name: {$ne: 'error'}
             };
             var query = Events.find(filter, {pass: 0, __v: 0});
 
